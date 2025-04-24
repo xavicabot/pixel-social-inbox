@@ -1,12 +1,11 @@
-import { Star, Reply, Archive, Trash, MessageSquareReply, Flag, Send } from "lucide-react";
+import { Star, Reply, Archive, Trash, MessageSquareReply, Flag, Send, Mail, MessageSquare } from "lucide-react";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { useState } from "react";
 
 const MessageView = () => {
-  const [showResponseForm, setShowResponseForm] = useState(false);
+  const messageType = "email"; // This would come from props/context in a real app
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
 
@@ -14,7 +13,16 @@ const MessageView = () => {
     <div className="flex-1 h-screen bg-white flex flex-col">
       <div className="p-6 border-b border-slate-200">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-slate-900">Q2 Marketing Strategy</h2>
+          <div className="flex items-center gap-2">
+            <div className={`p-1.5 rounded-md ${messageType === "email" ? "bg-blue-100" : "bg-purple-100"}`}>
+              {messageType === "email" ? (
+                <Mail className="w-5 h-5 text-blue-600" />
+              ) : (
+                <MessageSquare className="w-5 h-5 text-purple-600" />
+              )}
+            </div>
+            <h2 className="text-xl font-semibold text-slate-900">Q2 Marketing Strategy</h2>
+          </div>
           <div className="flex items-center space-x-2">
             <button className="p-2 text-slate-400 hover:text-yellow-400 rounded-full hover:bg-slate-100">
               <Star className="w-5 h-5" />
@@ -66,7 +74,15 @@ const MessageView = () => {
 
       <div className="border-t border-slate-200 p-6 bg-slate-50">
         <div className="space-y-4">
-          <h3 className="text-sm font-medium text-slate-900">AI Response Options</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-medium text-slate-900">AI Response Options</h3>
+            <span className={`text-xs px-2 py-1 rounded-full ${
+              messageType === "email" ? "bg-blue-100 text-blue-600" : "bg-purple-100 text-purple-600"
+            }`}>
+              {messageType === "email" ? "Email Message" : "Social Message"}
+            </span>
+          </div>
+          
           <div className="flex gap-3">
             <Button 
               variant="outline" 
@@ -74,7 +90,7 @@ const MessageView = () => {
               onClick={() => console.log("Create replay clicked")}
             >
               <MessageSquareReply className="w-4 h-4" />
-              Create Replay
+              Create Reply
             </Button>
             
             <Button 
@@ -88,64 +104,48 @@ const MessageView = () => {
             
             <Button 
               variant="outline" 
-              className="flex items-center gap-2"
-              onClick={() => {
-                setShowResponseForm(!showResponseForm);
-                console.log("Send response clicked");
-              }}
+              className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100"
+              onClick={() => console.log("Send response clicked")}
             >
               <Send className="w-4 h-4" />
               Send a Response
             </Button>
           </div>
 
-          {showResponseForm && (
-            <div className="mt-4 space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="subject">Subject</Label>
-                <Input
-                  id="subject"
-                  placeholder="RE: Q2 Marketing Strategy"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="body">Message</Label>
-                <Textarea
-                  id="body"
-                  placeholder="Type your response here..."
-                  className="min-h-[200px]"
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                />
-              </div>
-
-              <div className="flex justify-end gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setShowResponseForm(false);
-                    setSubject("");
-                    setBody("");
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                    console.log({ subject, body });
-                    setShowResponseForm(false);
-                    setSubject("");
-                    setBody("");
-                  }}
-                >
-                  Send
-                </Button>
-              </div>
+          <div className="mt-4 space-y-4 border-t border-slate-200 pt-4">
+            <div className="space-y-2">
+              <Label htmlFor="subject">Subject</Label>
+              <Input
+                id="subject"
+                placeholder="RE: Q2 Marketing Strategy"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              />
             </div>
-          )}
+            
+            <div className="space-y-2">
+              <Label htmlFor="body">Message</Label>
+              <Textarea
+                id="body"
+                placeholder="Type your response here..."
+                className="min-h-[200px]"
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+              />
+            </div>
+
+            <div className="flex justify-end">
+              <Button
+                onClick={() => {
+                  console.log({ subject, body });
+                  setSubject("");
+                  setBody("");
+                }}
+              >
+                Send
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
