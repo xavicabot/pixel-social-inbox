@@ -1,7 +1,15 @@
 import { Star, Reply, Archive, Trash, MessageSquareReply, Flag, Send } from "lucide-react";
 import { Button } from "./ui/button";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { useState } from "react";
 
 const MessageView = () => {
+  const [showResponseForm, setShowResponseForm] = useState(false);
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+
   return (
     <div className="flex-1 h-screen bg-white flex flex-col">
       <div className="p-6 border-b border-slate-200">
@@ -81,12 +89,63 @@ const MessageView = () => {
             <Button 
               variant="outline" 
               className="flex items-center gap-2"
-              onClick={() => console.log("Send response clicked")}
+              onClick={() => {
+                setShowResponseForm(!showResponseForm);
+                console.log("Send response clicked");
+              }}
             >
               <Send className="w-4 h-4" />
               Send a Response
             </Button>
           </div>
+
+          {showResponseForm && (
+            <div className="mt-4 space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="subject">Subject</Label>
+                <Input
+                  id="subject"
+                  placeholder="RE: Q2 Marketing Strategy"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="body">Message</Label>
+                <Textarea
+                  id="body"
+                  placeholder="Type your response here..."
+                  className="min-h-[200px]"
+                  value={body}
+                  onChange={(e) => setBody(e.target.value)}
+                />
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowResponseForm(false);
+                    setSubject("");
+                    setBody("");
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    console.log({ subject, body });
+                    setShowResponseForm(false);
+                    setSubject("");
+                    setBody("");
+                  }}
+                >
+                  Send
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
