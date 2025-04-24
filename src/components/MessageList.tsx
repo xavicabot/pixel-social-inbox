@@ -1,6 +1,7 @@
 
-import { Star, Mail, MessageSquare } from "lucide-react";
+import { Star, Mail, MessageSquare, Twitter, Linkedin, Facebook } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Badge } from "./ui/badge";
 
 const messages = [
   {
@@ -15,6 +16,7 @@ const messages = [
   {
     id: 2,
     type: "social",
+    platform: "twitter",
     from: "Twitter",
     subject: "New message from @techleader",
     preview: "Hey, I loved your latest article on React performance...",
@@ -33,6 +35,7 @@ const messages = [
   {
     id: 4,
     type: "social",
+    platform: "linkedin",
     from: "LinkedIn",
     subject: "3 new connection requests",
     preview: "You have new connection requests waiting for your review...",
@@ -40,6 +43,19 @@ const messages = [
     unread: false,
   },
 ];
+
+const getSocialIcon = (platform: string) => {
+  switch (platform) {
+    case 'twitter':
+      return <Twitter className="w-4 h-4 text-blue-400" />;
+    case 'linkedin':
+      return <Linkedin className="w-4 h-4 text-blue-700" />;
+    case 'facebook':
+      return <Facebook className="w-4 h-4 text-blue-600" />;
+    default:
+      return <MessageSquare className="w-4 h-4 text-indigo-400" />;
+  }
+};
 
 const MessageList = () => {
   return (
@@ -60,19 +76,27 @@ const MessageList = () => {
             key={message.id}
             className={cn(
               "p-4 border-b border-slate-100 hover:bg-slate-50 cursor-pointer",
-              message.unread && "bg-indigo-50 hover:bg-indigo-100"
+              message.unread && message.type === 'email' && "bg-blue-50 hover:bg-blue-100",
+              message.unread && message.type === 'social' && "bg-purple-50 hover:bg-purple-100"
             )}
           >
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
                 {message.type === "email" ? (
-                  <Mail className="w-4 h-4 text-slate-400" />
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-blue-600" />
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+                      Email
+                    </Badge>
+                  </div>
                 ) : (
-                  <MessageSquare className="w-4 h-4 text-indigo-400" />
+                  <div className="flex items-center gap-2">
+                    {getSocialIcon(message.platform)}
+                    <Badge variant="secondary" className="bg-purple-100 text-purple-700">
+                      {message.platform?.charAt(0).toUpperCase() + message.platform?.slice(1)}
+                    </Badge>
+                  </div>
                 )}
-                <span className="ml-2 text-sm font-medium text-slate-900">
-                  {message.from}
-                </span>
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-xs text-slate-500">{message.time}</span>
@@ -82,8 +106,11 @@ const MessageList = () => {
               </div>
             </div>
             <h3 className="text-sm font-medium text-slate-900 mb-1">
-              {message.subject}
+              {message.from}
             </h3>
+            <h4 className="text-sm font-medium text-slate-700 mb-1">
+              {message.subject}
+            </h4>
             <p className="text-sm text-slate-500 line-clamp-1">{message.preview}</p>
           </div>
         ))}
