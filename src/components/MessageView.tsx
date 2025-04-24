@@ -1,5 +1,5 @@
-
-import { Star, Reply, Archive, Trash } from "lucide-react";
+import { Star, Reply, Archive, Trash, MessageSquareReply, Flag, Send } from "lucide-react";
+import { Button } from "./ui/button";
 
 const MessageView = () => {
   return (
@@ -53,6 +53,40 @@ const MessageView = () => {
             Please review and let me know your thoughts. We can discuss this in detail during our next meeting.
           </p>
           <p className="text-slate-600 mb-4">Best regards,<br />Alice</p>
+        </div>
+      </div>
+
+      <div className="border-t border-slate-200 p-6 bg-slate-50">
+        <div className="space-y-4">
+          <h3 className="text-sm font-medium text-slate-900">AI Response Options</h3>
+          <div className="flex gap-3">
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => console.log("Create replay clicked")}
+            >
+              <MessageSquareReply className="w-4 h-4" />
+              Create Replay
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => console.log("Mark as spam clicked")}
+            >
+              <Flag className="w-4 h-4" />
+              Mark As Spam
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => console.log("Send response clicked")}
+            >
+              <Send className="w-4 h-4" />
+              Send a Response
+            </Button>
+          </div>
         </div>
       </div>
     </div>
