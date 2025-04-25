@@ -1,7 +1,7 @@
-
 import { Star, Mail, MessageSquare, Twitter, Linkedin, Facebook } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "./ui/badge";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const messages = [
   {
@@ -58,8 +58,14 @@ const getSocialIcon = (platform: string) => {
 };
 
 const MessageList = () => {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="w-96 h-screen border-r border-slate-200 bg-white">
+    <div className={cn(
+      "border-r border-slate-200 bg-white",
+      isMobile ? "w-full" : "w-96",
+      "h-screen"
+    )}>
       <div className="p-4 border-b border-slate-200">
         <div className="relative">
           <input
@@ -80,17 +86,17 @@ const MessageList = () => {
               message.unread && message.type === 'social' && "bg-purple-50 hover:bg-purple-100"
             )}
           >
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
               <div className="flex items-center gap-2">
                 {message.type === "email" ? (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <Mail className="w-4 h-4 text-blue-600" />
                     <Badge variant="secondary" className="bg-blue-100 text-blue-700">
                       Email
                     </Badge>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     {getSocialIcon(message.platform)}
                     <Badge variant="secondary" className="bg-purple-100 text-purple-700">
                       {message.platform?.charAt(0).toUpperCase() + message.platform?.slice(1)}
